@@ -1,5 +1,9 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 function authenticateJWT(req, res, next) {
-  const authHeader = req.header("Authorization");
+  console.log(req.headers);
+  const authHeader = req.headers["authorization"];
 
   if(!authHeader){
     return res.status(401).json({ error: "Unauthorized" });
@@ -11,7 +15,7 @@ function authenticateJWT(req, res, next) {
     return res.status(403).json({error : "forbidden"});
   }
 
-  jwt.verify(token, secretKey, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       console.error("JWT verification error: " + err.message);
       return res.status(403).json({ error: "Forbidden" });

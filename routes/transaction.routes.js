@@ -12,4 +12,4 @@ router.get('/transactions/summary', checkAuthStatusMiddleware, transactionContro
 
 router.delete('/transactions/:id', checkAuthStatusMiddleware, transactionController.deleteTransaction);
 
-module.express = router;
+module.exports = router;

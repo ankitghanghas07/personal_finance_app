@@ -6,15 +6,15 @@ const jwt = require("jsonwebtoken");
 
 
 async function signup(req, res) {
-  const eamil = req.body.eamil;
+  const email = req.body.email;
   const password = req.body.password;
 
-  const existingUser = await User.findUser(eamil);
-  if(existingUser){
+  const existingUser = await User.findUser(email);
+  if(existingUser.length){
     return res.json({message : 'user with this email already exists'});
   }
 
-  const user = new User(eamil, password);
+  const user = new User(email, password);
 
   try {
     await user.save();
@@ -22,17 +22,18 @@ async function signup(req, res) {
   } catch (error) {
     res.status(500).json({ error: error });
   }
+  
 }
 
 async function login(req, res) {
-  const eamil = req.body.eamil,
-    password = req.body.password;
-  const user = await User.findUser(eamil);
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = await User.findUser(email);
   if (!user) {
     return res.json({ message: "user not found" });
   }
 
-  const passwordMatched = await bcrypt.compare(password, user.password;
+  const passwordMatched = await bcrypt.compare(password, user.password);
   if (!passwordMatched) {
     return res.status(401).json({ message: "password did not match." });
   }
